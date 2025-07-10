@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style/homeStyle.css">
+</head>
+<body>
+    <header class="header">
+
+        <img src="../assets/logo.png" alt="logo">
+        <nav>
+            <a href="contar.html">Contagem Rápida</a>
+            <a href="./index.html">Home</a>
+            <a href="./estoque.html">Estoque</a>
+        </nav>
+    </header>
+
+<main class="main-home">
+    <h2>Resumo de Estoque</h2>
+    <div id="resumo" class="resumo-contador"></div>
+
+    <section class="kanban">
+      <div class="kanban-col aguardando">
+        <h2>Aguardando Laudo</h2>
+        <div id="listaAguardando"></div>
+      </div>
+      <div class="kanban-col liberadas">
+        <h2>Liberadas</h2>
+        <div id="listaLiberadas"></div>
+      </div>
+    </section>
+  </main>
+    
+<script src="./script/home.js"></script>
+
+</body>
+</html> 

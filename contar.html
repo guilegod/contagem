@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contar Estoque Rápido</title>
+  <link rel="stylesheet" href="./style/homeStyle.css"/>
+</head>
+<body>
+  <header class="header">
+    <img src="../assets/logo.png" alt="logo">
+    <nav>
+        <a href="contar.html">Contagem Rápida</a>
+      <a href="index.html">Home</a>
+      <a href="estoque.html">Estoque</a>
+    </nav>
+  </header>
+
+  <main class="main-home">
+    <h2>Contagem Rápida de Bobinas</h2>
+
+    <form id="formContagem" class="form-estoque">
+      <select id="tipo" required>
+        <option value="">Tipo</option>
+        <option value="PEWQ">PEWQ</option>
+        <option value="PEWS">PEWS</option>
+      </select>
+
+      <select id="diametro" required>
+        <option value="">Diâmetro</option>
+        <option value="4.00">4.00</option>
+        <option value="4.76">4.76</option>
+      </select>
+
+      <button type="submit">Contar</button>
+    </form>
+
+    <p id="msg" style="margin-top: 1rem; font-weight: bold;"></p>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('formContagem');
+      const msg = document.getElementById('msg');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const tipo = document.getElementById('tipo').value;
+        const diametro = document.getElementById('diametro').value;
+
+        const novaBobina = {
+          rastro: Date.now().toString(), // gera rastro automático
+          data: new Date().toISOString().split('T')[0],
+          turno: "1º Turno",
+          tipo,
+          diametro,
+          furos: 0,
+          comprimento: 0,
+          status: "Liberada"
+        };
+
+        const bobinas = JSON.parse(localStorage.getItem('bobinas')) || [];
+        bobinas.push(novaBobina);
+        localStorage.setItem('bobinas', JSON.stringify(bobinas));
+
+        form.reset();
+        msg.textContent = `✔️ Bobina ${tipo} ${diametro} adicionada ao estoque!`;
+
+        setTimeout(() => msg.textContent = '', 3000);
+      });
+    });
+  </script>
+</body>
+</html>

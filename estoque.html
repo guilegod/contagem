@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Bobinas</title>
+  <link rel="stylesheet" href="./style/homeStyle.css" />
+</head>
+<body>
+  <header class="header">
+    <img src="../assets/logo.png" alt="logo">
+    <nav>
+      <a href="contar.html">Contagem Rápida</a>
+      <a href="index.html">Home</a>
+      <a href="estoque.html">Estoque</a>
+    </nav>
+  </header>
+
+  <main class="main-home">
+    <h2>Cadastrar nova bobina</h2>
+    
+    <form id="formEstoque" class="form-estoque">
+      <input type="text" id="rastro" placeholder="Rastro" required />
+      <input type="date" id="data" required />
+      
+      <select id="turno" required>
+        <option value="">Turno</option>
+        <option value="1º Turno">1º Turno</option>
+        <option value="2º Turno">2º Turno</option>
+      </select>
+
+      <select id="tipo" required>
+        <option value="">Tipo</option>
+        <option value="PEWQ">PEWQ</option>
+        <option value="PEWS">PEWS</option>
+      </select>
+
+      <select id="diametro" required>
+        <option value="">Diâmetro</option>
+        <option value="4.00">4.00</option>
+        <option value="4.76">4.76</option>
+      </select>
+
+      <input type="number" id="furos" placeholder="Furos" required />
+      <input type="number" id="comprimento" placeholder="Comprimento (mm)" required />
+
+      <select id="status" required>
+        <option value="">Status</option>
+        <option value="Liberada">Liberada</option>
+        <option value="Aguardando Laudo">Aguardando Laudo</option>
+      </select>
+
+      <button type="submit">Salvar Bobina</button>
+    </form>
+  </main>
+
+  <script src="./script/estoque.js"></script>
+</body>
+</html>
