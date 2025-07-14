@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./style/homeStyle.css">
+  <meta charset="UTF-8">
+  <title>Estoque - Bobinas</title>
+  <link rel="stylesheet" href="style/estoqueC.css">
+  <link rel="stylesheet" href="style/base.css">
 </head>
 <body>
     <header class="header">
@@ -17,25 +17,30 @@
             <a href="./cadastroMaterial.html">Registrar Material</a>
         </nav>
     </header>
+  <div class="container">
 
-<main class="main-home">
-  <button id="btn-exemplo">Carregar Bobinas de Exemplo</button>
+    <aside class="menu-lateral">
+      <h2>Filtros</h2>
+      <button onclick="filtrar('todas')">Todas</button>
+      <button onclick="filtrar('Liberada')">Liberadas</button>
+      <button onclick="filtrar('Aguardando Laudo')">Aguardando</button>
+      <button onclick="filtrar('Bloqueada')">Bloqueadas</button>
+      <input type="date" id="filtroData" onchange="filtrarData()" />
+      <input type="text" id="filtroRastro" placeholder="Buscar por rastro" oninput="filtrarRastro()"/>
+    </aside>
 
-    <h2>Resumo de Estoque</h2>
-    <div id="resumo" class="resumo-contador"></div>
+    <main class="conteudo">
+      <header class="dashboard">
+        <div>Total de Bobinas: <span id="totalBobinas">0</span></div>
+        <div>Peso Total (kg): <span id="pesoTotal">0</span></div>
+      </header>
 
-    <section class="kanban">
-      <div class="kanban-col aguardando">
-        <h2>Aguardando Laudo</h2>
-        <div id="listaAguardando"></div>
-      </div>
-      <div class="kanban-col liberadas">
-        <h2>Liberadas</h2>
-        <div id="listaLiberadas"></div>
-      </div>
-    </section>
-  </main>
+      <section id="listaBobinas" class="lista-bobinas">
+        <!-- Bobinas renderizadas aqui -->
+      </section>
+    </main>
 
+  </div>
   <footer>
     <div style="text-align: center; padding: 20px; background-color: #f2f2f2; color: #555; font-family: Arial, sans-serif; font-size: 14px;">
         <p>&copy; <span id="current-year"></span> **Sistema Gerenciamento Produção**</p>
@@ -52,8 +57,7 @@
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 </footer>
-    
-<script src="./script/home.js"></script>
 
+  <script src="script/estoqueLogica.js"></script>
 </body>
-</html> 
+</html>

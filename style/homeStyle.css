@@ -240,3 +240,58 @@ form button:hover {
 .btn-excluir:hover {
   background-color: #c0392b;
 }
+
+.form-estoque textarea {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+body {
+  background-color: #F0FAFC;
+  color: #333;
+  font-family: sans-serif;
+}
+
+.card {
+  background-color: #FFFFFF;
+  border: 2px solid #2A88AC;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.header nav a {
+  color: #33A1C9;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.header nav a:hover {
+  text-decoration: underline;
+}
+
+.status-liberada {
+  border-left: 6px solid green;
+}
+
+.status-aguardando {
+  border-left: 6px solid orange;
+}
+
+.status-bloqueada {
+  border-left: 6px solid red;
+}
+.card p {
+  color: #444;
+  margin: 0.3rem 0;
+}
+.main-home {
+    background: #609cb4;
+    align-items: center;
+    
+}

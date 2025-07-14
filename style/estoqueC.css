@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+.container {
+  display: flex;
+}
+
+.menu-lateral {
+  width: 220px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+}
+
+.menu-lateral button, .menu-lateral input {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+}
+
+.menu-lateral button {
+  background-color: #444;
+  color: white;
+  cursor: pointer;
+}
+
+.menu-lateral button:hover {
+  background-color: #666;
+}
+
+.conteudo {
+  flex: 1;
+  padding: 20px;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.lista-bobinas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.card-bobina {
+  background-color: white;
+  border-left: 6px solid gray;
+  padding: 10px;
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

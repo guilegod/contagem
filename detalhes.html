@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes da Bobina</title>
+  <style>
+    body {
+      background-color: #F0FAFC;
+      color: #333;
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border: 2px solid #2A88AC;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      color: #33A1C9;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.7rem;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background-color: #2A88AC;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #33A1C9;
+    }
+
+    .botoes {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .botoes button {
+      flex: 1;
+    }
+
+    .msg {
+      margin-top: 1rem;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Editar Bobina</h2>
+
+    <form id="formEditar">
+      <label>Rastro</label>
+      <input type="text" id="rastro" disabled />
+
+      <label>Tipo</label>
+      <input type="text" id="tipo" disabled />
+
+      <label>Diâmetro</label>
+      <input type="text" id="diametro" disabled />
+
+      <label>Peso (toneladas)</label>
+      <input type="number" step="0.01" id="peso" required />
+
+      <label>Status</label>
+      <select id="status" required>
+        <option value="Aguardando Laudo">Aguardando Laudo</option>
+        <option value="Liberada">Liberada</option>
+        <option value="Bloqueada">Bloqueada</option>
+      </select>
+
+      <label>Motivo (para Liberada ou Bloqueada)</label>
+      <input type="text" id="motivo" placeholder="Ex: Sem defeitos, Oxidação..." />
+
+      <label>Observações</label>
+      <textarea id="observacoes" rows="4"></textarea>
+
+      <div class="botoes">
+        <button type="submit">Salvar</button>
+        <button type="button" onclick="window.print()">Imprimir</button>
+      </div>
+    </form>
+
+    <p class="msg" id="msg"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const rastroID = params.get("rastro");
+
+    const bobinas = JSON.parse(localStorage.getItem("bobinas")) || [];
+    const bobina = bobinas.find(b => b.rastro === rastroID);
+
+    if (!bobina) {
+      document.body.innerHTML = "<p style='color:red'>Bobina não encontrada!</p>";
+    } else {
+      document.getElementById("rastro").value = bobina.rastro;
+      document.getElementById("tipo").value = bobina.tipo;
+      document.getElementById("diametro").value = bobina.diametro;
+      document.getElementById("peso").value = bobina.peso || "";
+      document.getElementById("status").value = bobina.status || "Aguardando Laudo";
+      document.getElementById("motivo").value = bobina.motivo || "";
+      document.getElementById("observacoes").value = bobina.observacoes || "Sem observações.";
+    }
+
+    document.getElementById("formEditar").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const novoStatus = document.getElementById("status").value;
+      const novoMotivo = document.getElementById("motivo").value.trim();
+      const novoPeso = parseFloat(document.getElementById("peso").value);
+      const novasObs = document.getElementById("observacoes").value.trim() || "Sem observações.";
+
+      if ((novoStatus === "Liberada" || novoStatus === "Bloqueada") && novoMotivo === "") {
+        alert("Informe o motivo do status!");
+        return;
+      }
+
+      // Atualizar os dados
+      bobina.status = novoStatus;
+      bobina.motivo = novoMotivo;
+      bobina.peso = novoPeso;
+      bobina.observacoes = novasObs;
+
+      // Salvar
+      localStorage.setItem("bobinas", JSON.stringify(bobinas));
+
+      document.getElementById("msg").textContent = "✅ Bobina atualizada com sucesso!";
+    });
+  </script>
+</body>
+</html>

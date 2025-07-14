@@ -1,0 +1,50 @@
+.card {
+  background-color: #FFFFFF;
+  border: 2px solid #2A88AC;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.card p {
+  color: #444;
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+}
+
+.card a {
+  margin-top: 0.7rem;
+  display: inline-block;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* Status por cor */
+.status-liberada {
+  border-left: 6px solid green;
+}
+
+.status-aguardando {
+  border-left: 6px solid orange;
+}
+
+.status-bloqueada {
+  border-left: 6px solid red;
+}

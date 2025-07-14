@@ -44,14 +44,32 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Comprimento: <span class="metrosProduto">${b.comprimento}</span></p>
         <p>Status: <span class="statusProduto">${b.status}</span></p>
         <button class="btn-excluir" data-index="${idx}">Excluir</button>
+        
       `;
+      const link = document.createElement("a");
+      link.href = `detalhes.html?rastro=${b.rastro}`;
+      link.textContent = "Ver detalhes";
+      card.appendChild(link);
 
       if (b.status === 'Aguardando Laudo') {
         listaAguardando.appendChild(card);
       } else {
         listaLiberadas.appendChild(card);
       }
-    });
+
+    // Aplicar classe de borda colorida por status (opcional, se já estiver)
+  if (b.status === "Liberada") card.classList.add("status-liberada");
+  else if (b.status === "Bloqueada") card.classList.add("status-bloqueada");
+  else card.classList.add("status-aguardando");
+
+  if (b.status === "Liberada") {
+    listaLiberadas.appendChild(card);
+  } else if (b.status === "Bloqueada") {
+    listaBloqueadas.appendChild(card); // precisa adicionar essa sessão também se for usar
+  } else {
+    listaAguardando.appendChild(card);
+  }
+});
 
     // vincula eventos de delete
     document.querySelectorAll('.btn-excluir').forEach(btn => {
@@ -66,4 +84,115 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   renderizar();
+});
+document.getElementById('btn-exemplo').addEventListener('click', () => {
+  const bobinasTeste = [
+    {
+      rastro: "R001",
+      data: "2025-07-10",
+      turno: "1Turno",
+      tipo: "PEWQ",
+      diametro: "4.76",
+      furos: "Sim",
+      comprimento: "25",
+      status: "Aguardando Laudo"
+    },
+    {
+      rastro: "R002",
+      data: "2025-07-10",
+      turno: "2Turno",
+      tipo: "PEWQ",
+      diametro: "6.35",
+      furos: "Não",
+      comprimento: "30",
+      status: "Liberada"
+    },
+    {
+      rastro: "R003",
+      data: "2025-07-09",
+      turno: "3Turno",
+      tipo: "PEWQ",
+      diametro: "4.76",
+      furos: "Sim",
+      comprimento: "20",
+      status: "Bloqueada",
+      motivo: "Oxidação"
+    },
+    {
+      rastro: "R004",
+      data: "2025-07-09",
+      turno: "1Turno",
+      tipo: "PESR",
+      diametro: "9.52",
+      furos: "Não",
+      comprimento: "22",
+      status: "Aguardando Laudo"
+    },
+    {
+      rastro: "R005",
+      data: "2025-07-08",
+      turno: "2Turno",
+      tipo: "PEWQ",
+      diametro: "6.35",
+      furos: "Sim",
+      comprimento: "28",
+      status: "Liberada"
+    },
+    {
+      rastro: "R006",
+      data: "2025-07-08",
+      turno: "3Turno",
+      tipo: "PESR",
+      diametro: "9.52",
+      furos: "Sim",
+      comprimento: "35",
+      status: "Bloqueada",
+      motivo: "Furos fora da tolerância"
+    },
+    {
+      rastro: "R007",
+      data: "2025-07-07",
+      turno: "1Turno",
+      tipo: "PEWQ",
+      diametro: "4.76",
+      furos: "Não",
+      comprimento: "27",
+      status: "Aguardando Laudo"
+    },
+    {
+      rastro: "R008",
+      data: "2025-07-07",
+      turno: "2Turno",
+      tipo: "PEWQ",
+      diametro: "6.35",
+      furos: "Sim",
+      comprimento: "29",
+      status: "Liberada"
+    },
+    {
+      rastro: "R009",
+      data: "2025-07-06",
+      turno: "3Turno",
+      tipo: "PESR",
+      diametro: "9.52",
+      furos: "Sim",
+      comprimento: "24",
+      status: "Bloqueada",
+      motivo: "Deformação"
+    },
+    {
+      rastro: "R010",
+      data: "2025-07-06",
+      turno: "1Turno",
+      tipo: "PEWQ",
+      diametro: "4.76",
+      furos: "Não",
+      comprimento: "26",
+      status: "Liberada"
+    }
+  ];
+
+  localStorage.setItem('bobinas', JSON.stringify(bobinasTeste));
+  alert('Bobinas de exemplo carregadas com sucesso!');
+  location.reload(); // Recarrega a página pra exibir os dados
 });

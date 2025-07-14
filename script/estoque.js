@@ -4,16 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const novaBobina = {
-      rastro: document.getElementById('rastro').value.trim(),
-      data: document.getElementById('data').value,
-      turno: document.getElementById('turno').value,
-      tipo: document.getElementById('tipo').value,
-      diametro: document.getElementById('diametro').value,
-      furos: parseInt(document.getElementById('furos').value),
-      comprimento: parseInt(document.getElementById('comprimento').value),
-      status: document.getElementById('status').value
-    };
+      const novaBobina = {
+    rastro: document.getElementById('rastro').value.trim(),
+    data: document.getElementById('data').value,
+    turno: document.getElementById('turno').value,
+    tipo: document.getElementById('tipo').value,
+    diametro: document.getElementById('diametro').value,
+    furos: parseInt(document.getElementById('furos').value),
+    comprimento: parseInt(document.getElementById('comprimento').value),
+    status: document.getElementById('status').value,
+    peso: parseFloat(document.getElementById('peso').value),
+    observacoes: document.getElementById('observacoes').value.trim() || "Sem observações.",
+    motivo: "",
+  };
 
     // validação básica
     if (

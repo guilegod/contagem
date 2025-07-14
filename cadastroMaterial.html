@@ -6,13 +6,14 @@
   <title>Cadastro de Bobinas</title>
   <link rel="stylesheet" href="./style/homeStyle.css" />
 </head>
+
 <body>
   <header class="header">
-    <img src="../assets/logo.png" alt="logo">
+    <img src="./assets/logo.png" alt="logo">
     <nav>
       <a href="contar.html">Contagem Rápida</a>
       <a href="index.html">Home</a>
-      <a href="estoque.html">Estoque</a>
+      <a href="cadastroMaterial.html">Registrar Material</a>
     </nav>
   </header>
 
@@ -40,9 +41,14 @@
         <option value="4.00">4.00</option>
         <option value="4.76">4.76</option>
       </select>
-
-      <input type="number" id="furos" placeholder="Furos" required />
+      
       <input type="number" id="comprimento" placeholder="Comprimento (mm)" required />
+      <input type="number" id="peso" placeholder="Peso" step="0.01" required />
+      <input type="number" id="furos" placeholder="Furos" required />
+      
+      
+      <textarea id="observacoes" placeholder="Observações (opcional)"></textarea>
+
 
       <select id="status" required>
         <option value="">Status</option>
