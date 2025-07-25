@@ -1,7 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   const listaAguardando = document.getElementById('listaAguardando');
-  const listaLiberadas  = document.getElementById('listaLiberadas');
-  const resumoDiv       = document.getElementById('resumo');
+  const listaLiberadas = document.getElementById('listaLiberadas');
+  const btnExemplo = document.getElementById('btn-exemplo');
+  const canvasCtx = document.getElementById('graficoStatusBobinas').getContext('2d');
+  const btnPizza = document.getElementById('btn-pizza');
+  const btnBar = document.getElementById('btn-bar');
+
+  let chartInstance;
+  let curType = 'bar';
 
   function carregarBobinas() {
     return JSON.parse(localStorage.getItem('bobinas')) || [];
@@ -11,188 +17,177 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('bobinas', JSON.stringify(arr));
   }
 
-  function atualizarResumo(bobinas) {
-    // conta por tipo+diâmetro
-    const contagem = bobinas.reduce((acc, b) => {
-      const key = `${b.tipo} ${b.diametro}`;
-      acc[key] = (acc[key] || 0) + 1;
-      return acc;
-    }, {});
+  function gerarExemplo() {
+    const tipos = ['PEWQ', 'PEWS'];
+    const diametros = ['4.76', '6.35', '7.94', '9.52'];
+    const turnos = ['1Turno', '2Turno', '3Turno'];
+    const linhas = ['01', '02'];
+    const statusList = ['Liberada', 'Aguardando Laudo', 'Bloqueada'];
+    const motivosBloqueio = ['Oxidação', 'Solda', 'Resíduo', 'Máquina'];
+    const observacoes = ['Verificar próxima OP', 'Deformação leve', 'Solicitar análise extra', 'OK'];
 
-    // renderiza
-    resumoDiv.innerHTML = Object.entries(contagem)
-      .map(([k, v]) => `<p>${k}: ${v}</p>`)
-      .join('');
+    let arr = [];
+    for (let i = 0; i < 120; i++) {
+      const status = statusList[Math.floor(Math.random() * statusList.length)];
+      const peso = parseFloat((Math.random() * 15 + 5).toFixed(2)); // entre 5 e 20 kg
+      const bobina = {
+        rastro: `R${('000' + i).slice(-4)}`,
+        data: `2025-07-${Math.floor(Math.random() * 20 + 1).toString().padStart(2, '0')}`,
+        turno: turnos[Math.floor(Math.random() * turnos.length)],
+        tipo: tipos[Math.floor(Math.random() * tipos.length)],
+        diametro: diametros[Math.floor(Math.random() * diametros.length)],
+        furos: Math.random() < 0.5 ? 'Sim' : 'Não',
+        comprimento: Math.floor(Math.random() * 100 + 20),
+        peso: peso,
+        status: status,
+        motivo: status === 'Bloqueada' ? motivosBloqueio[Math.floor(Math.random() * motivosBloqueio.length)] : '',
+        observacoes: observacoes[Math.floor(Math.random() * observacoes.length)]
+      };
+      arr.push(bobina);
+    }
+    salvarBobinas(arr);
+    renderizar();
+    gerarGrafico(curType);
   }
 
   function renderizar() {
     const bobinas = carregarBobinas();
     listaAguardando.innerHTML = '';
-    listaLiberadas.innerHTML  = '';
-    atualizarResumo(bobinas);
+    listaLiberadas.innerHTML = '';
 
-    bobinas.forEach((b, idx) => {
+    let limLiberadas = 0, limAguardando = 0;
+
+    bobinas.forEach((b, i) => {
+      if (b.status === 'Liberada' && limLiberadas >= 40) return;
+      if (b.status === 'Aguardando Laudo' && limAguardando >= 40) return;
+
       const card = document.createElement('div');
       card.className = 'card card-produto';
       card.innerHTML = `
-        <h3 class="rastroOP">Rastro: <span class="rastroID">${b.rastro}</span></h3>
-        <p>Data: <span class="dataProduto">${b.data}</span></p>
-        <p>Turno: <span class="turnoProduto">${b.turno}</span></p>
-        <p>Tipo: <span class="tipoProduto">${b.tipo}</span></p>
-        <p>Diâmetro: <span class="diametroProduto">${b.diametro}</span></p>
-        <p>Furos: <span class="furosProduto">${b.furos}</span></p>
-        <p>Comprimento: <span class="metrosProduto">${b.comprimento}</span></p>
-        <p>Status: <span class="statusProduto">${b.status}</span></p>
-        <button class="btn-excluir" data-index="${idx}">Excluir</button>
-        
+        <h3>Rastro: ${b.rastro}</h3>
+        <p>Data: ${b.data}</p>
+        <p>Turno: ${b.turno}</p>
+        <p>Tipo: ${b.tipo}</p>
+        <p>Diametro: ${b.diametro}</p>
+        <p>Furos: ${b.furos}</p>
+        <p>Comprimento: ${b.comprimento}m</p>
+        <p>Peso: ${b.peso?.toFixed(2) ?? "0.00"} kg</p>
+        <p>Status: ${b.status}</p>
+        ${b.status === 'Bloqueada' ? `<p>Motivo: ${b.motivo}</p>` : ''}
+        <p>Observações: ${b.observacoes || "Sem observações"}</p>
+        <button class="btn-excluir" data-index="${i}">Excluir</button>
       `;
-      const link = document.createElement("a");
+
+      const link = document.createElement('a');
       link.href = `detalhes.html?rastro=${b.rastro}`;
-      link.textContent = "Ver detalhes";
+      link.textContent = 'Ver detalhes';
       card.appendChild(link);
 
-      if (b.status === 'Aguardando Laudo') {
-        listaAguardando.appendChild(card);
-      } else {
+      if (b.status === 'Liberada') {
         listaLiberadas.appendChild(card);
+        limLiberadas++;
+      } else if (b.status === 'Aguardando Laudo') {
+        listaAguardando.appendChild(card);
+        limAguardando++;
       }
+    });
 
-    // Aplicar classe de borda colorida por status (opcional, se já estiver)
-  if (b.status === "Liberada") card.classList.add("status-liberada");
-  else if (b.status === "Bloqueada") card.classList.add("status-bloqueada");
-  else card.classList.add("status-aguardando");
-
-  if (b.status === "Liberada") {
-    listaLiberadas.appendChild(card);
-  } else if (b.status === "Bloqueada") {
-    listaBloqueadas.appendChild(card); // precisa adicionar essa sessão também se for usar
-  } else {
-    listaAguardando.appendChild(card);
-  }
-});
-
-    // vincula eventos de delete
     document.querySelectorAll('.btn-excluir').forEach(btn => {
-      btn.addEventListener('click', e => {
-        const i = parseInt(e.currentTarget.dataset.index, 10);
-        const arr = carregarBobinas();
-        arr.splice(i, 1);
+      btn.onclick = () => {
+        let arr = carregarBobinas();
+        arr.splice(parseInt(btn.dataset.index), 1);
         salvarBobinas(arr);
-        renderizar(); // rerenderiza tudo
-      });
+        renderizar();
+        gerarGrafico(curType);
+      };
     });
   }
 
-  renderizar();
-});
-document.getElementById('btn-exemplo').addEventListener('click', () => {
-  const bobinasTeste = [
-    {
-      rastro: "R001",
-      data: "2025-07-10",
-      turno: "1Turno",
-      tipo: "PEWQ",
-      diametro: "4.76",
-      furos: "Sim",
-      comprimento: "25",
-      status: "Aguardando Laudo"
-    },
-    {
-      rastro: "R002",
-      data: "2025-07-10",
-      turno: "2Turno",
-      tipo: "PEWQ",
-      diametro: "6.35",
-      furos: "Não",
-      comprimento: "30",
-      status: "Liberada"
-    },
-    {
-      rastro: "R003",
-      data: "2025-07-09",
-      turno: "3Turno",
-      tipo: "PEWQ",
-      diametro: "4.76",
-      furos: "Sim",
-      comprimento: "20",
-      status: "Bloqueada",
-      motivo: "Oxidação"
-    },
-    {
-      rastro: "R004",
-      data: "2025-07-09",
-      turno: "1Turno",
-      tipo: "PESR",
-      diametro: "9.52",
-      furos: "Não",
-      comprimento: "22",
-      status: "Aguardando Laudo"
-    },
-    {
-      rastro: "R005",
-      data: "2025-07-08",
-      turno: "2Turno",
-      tipo: "PEWQ",
-      diametro: "6.35",
-      furos: "Sim",
-      comprimento: "28",
-      status: "Liberada"
-    },
-    {
-      rastro: "R006",
-      data: "2025-07-08",
-      turno: "3Turno",
-      tipo: "PESR",
-      diametro: "9.52",
-      furos: "Sim",
-      comprimento: "35",
-      status: "Bloqueada",
-      motivo: "Furos fora da tolerância"
-    },
-    {
-      rastro: "R007",
-      data: "2025-07-07",
-      turno: "1Turno",
-      tipo: "PEWQ",
-      diametro: "4.76",
-      furos: "Não",
-      comprimento: "27",
-      status: "Aguardando Laudo"
-    },
-    {
-      rastro: "R008",
-      data: "2025-07-07",
-      turno: "2Turno",
-      tipo: "PEWQ",
-      diametro: "6.35",
-      furos: "Sim",
-      comprimento: "29",
-      status: "Liberada"
-    },
-    {
-      rastro: "R009",
-      data: "2025-07-06",
-      turno: "3Turno",
-      tipo: "PESR",
-      diametro: "9.52",
-      furos: "Sim",
-      comprimento: "24",
-      status: "Bloqueada",
-      motivo: "Deformação"
-    },
-    {
-      rastro: "R010",
-      data: "2025-07-06",
-      turno: "1Turno",
-      tipo: "PEWQ",
-      diametro: "4.76",
-      furos: "Não",
-      comprimento: "26",
-      status: "Liberada"
-    }
-  ];
+  function gerarGrafico(type) {
+    curType = type;
+    const bobinas = carregarBobinas();
 
-  localStorage.setItem('bobinas', JSON.stringify(bobinasTeste));
-  alert('Bobinas de exemplo carregadas com sucesso!');
-  location.reload(); // Recarrega a página pra exibir os dados
+    const statusCount = { Liberada: 0, 'Aguardando Laudo': 0, Bloqueada: 0 };
+    const pesoCount = { Liberada: 0, 'Aguardando Laudo': 0, Bloqueada: 0 };
+
+    const motivoCount = {};
+    bobinas.forEach(b => {
+      const p = parseFloat(b.peso || 0);
+      statusCount[b.status] = (statusCount[b.status] || 0) + 1;
+      pesoCount[b.status] = (pesoCount[b.status] || 0) + p;
+
+      if (b.status === 'Bloqueada') {
+        motivoCount[b.motivo] = (motivoCount[b.motivo] || 0) + 1;
+      }
+    });
+
+    const data = {
+      labels: ['Liberadas', 'Aguardando Laudo', 'Bloqueadas'],
+      datasets: [
+        {
+          label: 'Qtd. Bobinas',
+          data: [statusCount.Liberada, statusCount['Aguardando Laudo'], statusCount.Bloqueada],
+          backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+          yAxisID: 'y'
+        },
+        {
+          label: 'Peso (kg)',
+          data: [
+            pesoCount.Liberada.toFixed(2),
+            pesoCount['Aguardando Laudo'].toFixed(2),
+            pesoCount.Bloqueada.toFixed(2)
+          ],
+          backgroundColor: ['rgba(40,167,69,0.3)', 'rgba(255,193,7,0.3)', 'rgba(220,53,69,0.3)'],
+          yAxisID: 'y1'
+        }
+      ]
+    };
+
+    const options = {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: 'Resumo de Bobinas (Quantidade x Peso)'
+        }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: 'Quantidade' },
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: 'Peso (kg)' },
+          grid: { drawOnChartArea: false },
+        }
+      }
+    };
+
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(canvasCtx, {
+      type,
+      data,
+      options
+    });
+
+    if (type === 'pie' && statusCount.Bloqueada > 0) {
+      setTimeout(() => {
+        alert('Motivos de Bloqueio:\n' +
+          Object.entries(motivoCount).map(([m, c]) => `${m}: ${c}`).join('\n')
+        );
+      }, 50);
+    }
+  }
+
+  btnExemplo.onclick = gerarExemplo;
+  btnBar.onclick = () => gerarGrafico('bar');
+  btnPizza.onclick = () => gerarGrafico('pie');
+
+  renderizar();
+  gerarGrafico('bar');
 });

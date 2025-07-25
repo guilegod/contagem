@@ -1,59 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./style/homeStyle.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home - Sistema de Bobinas</title>
+  <link rel="stylesheet" href="./style/homeStyle.css">
 </head>
 <body>
-    <header class="header">
+  <header class="header">
+    <img src="./assets/logo.png" alt="logo">
+    <nav>
+      <a href="estoqueCompleto.html">Rastreio</a>
+      <a href="contar.html">Contagem Rápida</a>
+      <a href="./index.html">Home</a>
+      <a href="./cadastroMaterial.html">Registrar Material</a>
+    </nav>
+  </header>
 
-        <img src="./assets/logo.png" alt="logo">
-        <nav>
-            <a href="estoqueCompleto.html">Rastreio</a>
-            <a href="contar.html">Contagem Rápida</a>
-            <a href="./index.html">Home</a>
-            <a href="./cadastroMaterial.html">Registrar Material</a>
-        </nav>
-    </header>
+  <button id="btn-exemplo">Gerar 120 Bobinas Exemplo</button>
 
-<main class="main-home">
-  <button id="btn-exemplo">Carregar Bobinas de Exemplo</button>
-
-    <h2>Resumo de Estoque</h2>
-    <div id="resumo" class="resumo-contador"></div>
-
-    <section class="kanban">
-      <div class="kanban-col aguardando">
-        <h2>Aguardando Laudo</h2>
-        <div id="listaAguardando"></div>
+  <div class="container-principal">
+    
+    <!-- GRÁFICO -->
+    <section class="grafico-section">
+      <h2>Resumo Visual de Estoque</h2>
+      <div style="margin-bottom:1rem;">
+        <button id="btn-pizza">Pizza</button>
+        <button id="btn-bar">Barra</button>
       </div>
-      <div class="kanban-col liberadas">
-        <h2>Liberadas</h2>
-        <div id="listaLiberadas"></div>
+      <div id="chartContainer">
+        <canvas id="graficoStatusBobinas" width="400" height="200"></canvas>
       </div>
     </section>
-  </main>
+
+    <!-- ÁREA PRINCIPAL DAS BOBINAS -->
+    <main class="main-home">
+      <div id="listaLiberadas" class="lista-bobinas"></div>
+      <div id="listaAguardando" class="lista-bobinas"></div>
+    </main>
+  </div>
 
   <footer>
-    <div style="text-align: center; padding: 20px; background-color: #f2f2f2; color: #555; font-family: Arial, sans-serif; font-size: 14px;">
-        <p>&copy; <span id="current-year"></span> **Sistema Gerenciamento Produção**</p>
-        <p>Desenvolvido por Marco Aurelio T Oliveira Junior</p>
-        <p>Soluções em Controle de Produção, Gestão e Análise de Dados para sua Empresa.</p>
-        <div style="margin-top: 10px;">
-            <a href="/politica-de-privacidade.html" style="color: #007bff; text-decoration: none; margin: 0 10px;">Política de Privacidade</a> |
-            <a href="/termos-de-uso.html" style="color: #007bff; text-decoration: none; margin: 0 10px;">Termos de Uso</a>
-        </div>
-        <p style="margin-top: 10px;">Contato: <a href="mailto:juniorrathke1@gmail.com" style="color: #007bff; text-decoration: none;">juniorrathke1@gmail.com</a></p>
+    <div style="text-align:center; padding:20px; background:#f2f2f2; color:#555; font-size:14px;">
+      <p>&copy; <span id="current-year"></span> Sistema Gerenciamento Produção</p>
+      <p>Desenvolvido por Marco Aurelio T Oliveira Junior</p>
+      <p>
+        <a href="/politica-de-privacidade.html">Política de Privacidade</a> |
+        <a href="/termos-de-uso.html">Termos de Uso</a>
+      </p>
+      <p>Contato: <a href="mailto:juniorrathke1@gmail.com">juniorrathke1@gmail.com</a></p>
     </div>
+    <script>document.getElementById('current-year').textContent=new Date().getFullYear();</script>
+  </footer>
 
-    <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
-</footer>
-    
-<script src="./script/home.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./script/home.js"></script>
 </body>
-</html> 
+</html>

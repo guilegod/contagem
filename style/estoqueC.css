@@ -17,7 +17,7 @@ body {
 }
 
 .menu-lateral button, .menu-lateral input {
-  display: block;
+  display:inline;
   margin: 10px 0;
   padding: 10px;
   width: 100%;
@@ -26,7 +26,7 @@ body {
 }
 
 .menu-lateral button {
-  background-color: #444;
+  background-color: #388497;
   color: white;
   cursor: pointer;
 }
@@ -43,7 +43,7 @@ body {
 .dashboard {
   display: flex;
   justify-content: space-between;
-  background: white;
+  background: rgb(129, 133, 194);
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -57,7 +57,7 @@ body {
 }
 
 .card-bobina {
-  background-color: white;
+  background-color: rgb(166, 171, 228);
   border-left: 6px solid gray;
   padding: 10px;
   width: 250px;
